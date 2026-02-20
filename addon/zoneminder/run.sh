@@ -51,9 +51,9 @@ for _ in $(seq 1 60); do
 done
 
 mysql --socket="${MYSQL_SOCKET}" -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';" || true
-mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -e "CREATE DATABASE IF NOT EXISTS \\`${DB_NAME}\\`;"
+mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
 mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';"
-mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON \\`${DB_NAME}\\`.* TO '${DB_USER}'@'localhost'; FLUSH PRIVILEGES;"
+mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost'; FLUSH PRIVILEGES;"
 
 if ! mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -D "${DB_NAME}" -e "SELECT 1 FROM Config LIMIT 1;" >/dev/null 2>&1; then
   mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" "${DB_NAME}" < /usr/share/zoneminder/db/zm_create.sql
