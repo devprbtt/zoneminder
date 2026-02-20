@@ -17,15 +17,18 @@ devices:
 map:
   - addon_config:rw
   - share:rw
+  - media:rw
 options:
   db_name: zm
   db_user: zmuser
   db_pass: zmsecret
   db_root_pass: rootsecret
   timezone: UTC
+  events_path: /data/events
 schema:
   db_name: str
   db_user: str
   db_pass: str
   db_root_pass: str
   timezone: str
+  events_path: str

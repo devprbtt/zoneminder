@@ -3,7 +3,6 @@ set -euo pipefail
 
 OPTIONS_FILE="/data/options.json"
 MYSQL_DATADIR="/data/mysql"
-EVENTS_DIR="/data/events"
 MYSQL_SOCKET="/run/mysqld/mysqld.sock"
 APACHE_PORT="8088"
 
@@ -31,6 +30,7 @@ DB_USER="$(read_opt db_user zmuser)"
 DB_PASS="$(read_opt db_pass zmsecret)"
 DB_ROOT_PASS="$(read_opt db_root_pass rootsecret)"
 TIMEZONE="$(read_opt timezone UTC)"
+EVENTS_DIR="$(read_opt events_path /data/events)"
 
 export TZ="${TIMEZONE}"
 
@@ -89,7 +89,7 @@ if [[ -L /var/cache/zoneminder/events || -d /var/cache/zoneminder/events ]]; the
   rm -rf /var/cache/zoneminder/events
 fi
 ln -s "${EVENTS_DIR}" /var/cache/zoneminder/events
-chown -R www-data:www-data /var/cache/zoneminder "${EVENTS_DIR}"
+chown -R www-data:www-data /var/cache/zoneminder "${EVENTS_DIR}" || true
 
 zmpkg.pl start
 
