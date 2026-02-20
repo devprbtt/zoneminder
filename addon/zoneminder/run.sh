@@ -60,11 +60,19 @@ if ! mysql --socket="${MYSQL_SOCKET}" -uroot -p"${DB_ROOT_PASS}" -D "${DB_NAME}"
 fi
 
 if [[ -f /etc/zm/zm.conf ]]; then
-  sed -i "s/^ZM_DB_HOST=.*/ZM_DB_HOST=localhost/" /etc/zm/zm.conf
-  sed -i "s/^ZM_DB_NAME=.*/ZM_DB_NAME=${DB_NAME}/" /etc/zm/zm.conf
-  sed -i "s/^ZM_DB_USER=.*/ZM_DB_USER=${DB_USER}/" /etc/zm/zm.conf
-  sed -i "s/^ZM_DB_PASS=.*/ZM_DB_PASS=${DB_PASS}/" /etc/zm/zm.conf
+  chown root:www-data /etc/zm/zm.conf || true
+  chmod 644 /etc/zm/zm.conf || true
 fi
+
+mkdir -p /etc/zm/conf.d
+cat > /etc/zm/conf.d/99-addon.conf <<EOF
+ZM_DB_HOST=localhost
+ZM_DB_NAME=${DB_NAME}
+ZM_DB_USER=${DB_USER}
+ZM_DB_PASS=${DB_PASS}
+EOF
+chown root:www-data /etc/zm/conf.d/99-addon.conf || true
+chmod 644 /etc/zm/conf.d/99-addon.conf || true
 
 # Keep host port 80 free for other services by moving Apache to a fixed port.
 if [[ -f /etc/apache2/ports.conf ]]; then
