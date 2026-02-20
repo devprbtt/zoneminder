@@ -22,5 +22,6 @@ This is a minimal starting point for running ZoneMinder as a Home Assistant cust
 
 - This first version is intentionally minimal and only advertises `amd64`.
 - `host_network: true` is enabled for camera/RTSP compatibility.
+- Apache/ZoneMinder web UI runs on host port `8088` (not `80`).
 - `devices` currently maps `/dev/video0` as a starting point.
 - Further hardening is expected (multi-arch, healthcheck, startup retries, and external DB mode).

@@ -17,10 +17,6 @@ devices:
 map:
   - addon_config:rw
   - share:rw
-ports:
-  80/tcp: 8080
-ports_description:
-  80/tcp: ZoneMinder Web UI
 options:
   db_name: zm
   db_user: zmuser

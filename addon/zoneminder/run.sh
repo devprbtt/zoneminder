@@ -5,6 +5,7 @@ OPTIONS_FILE="/data/options.json"
 MYSQL_DATADIR="/data/mysql"
 EVENTS_DIR="/data/events"
 MYSQL_SOCKET="/run/mysqld/mysqld.sock"
+APACHE_PORT="8088"
 
 read_opt() {
   local key="$1"
@@ -63,6 +64,17 @@ if [[ -f /etc/zm/zm.conf ]]; then
   sed -i "s/^ZM_DB_NAME=.*/ZM_DB_NAME=${DB_NAME}/" /etc/zm/zm.conf
   sed -i "s/^ZM_DB_USER=.*/ZM_DB_USER=${DB_USER}/" /etc/zm/zm.conf
   sed -i "s/^ZM_DB_PASS=.*/ZM_DB_PASS=${DB_PASS}/" /etc/zm/zm.conf
+fi
+
+# Keep host port 80 free for other services by moving Apache to a fixed port.
+if [[ -f /etc/apache2/ports.conf ]]; then
+  sed -i -E "s/^Listen[[:space:]]+[0-9]+$/Listen ${APACHE_PORT}/" /etc/apache2/ports.conf
+fi
+if [[ -d /etc/apache2/sites-available ]]; then
+  sed -i -E "s/<VirtualHost \\*:80>/<VirtualHost *:${APACHE_PORT}>/g" /etc/apache2/sites-available/*.conf || true
+fi
+if [[ -d /etc/apache2/sites-enabled ]]; then
+  sed -i -E "s/<VirtualHost \\*:80>/<VirtualHost *:${APACHE_PORT}>/g" /etc/apache2/sites-enabled/*.conf || true
 fi
 
 if [[ -L /var/cache/zoneminder/events || -d /var/cache/zoneminder/events ]]; then
