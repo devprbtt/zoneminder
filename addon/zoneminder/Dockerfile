@@ -1,0 +1,27 @@
+ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base-debian:bookworm
+FROM ${BUILD_FROM}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      apache2 \
+      curl \
+      jq \
+      libapache2-mod-php \
+      mariadb-client \
+      mariadb-server \
+      php \
+      php-mysql \
+      tzdata \
+      zoneminder \
+    && a2enmod cgi headers expires rewrite \
+    && a2enconf zoneminder \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
+
+EXPOSE 80
+
+CMD ["/run.sh"]

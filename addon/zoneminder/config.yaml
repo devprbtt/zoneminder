@@ -1,0 +1,35 @@
+name: ZoneMinder
+version: "0.1.0"
+slug: zoneminder
+description: Minimal ZoneMinder Home Assistant add-on
+url: "https://github.com/ZoneMinder/zoneminder"
+arch:
+  - amd64
+startup: services
+boot: auto
+init: false
+host_network: true
+privileged:
+  - SYS_ADMIN
+  - SYS_RAWIO
+devices:
+  - /dev/video0
+map:
+  - addon_config:rw
+  - share:rw
+ports:
+  80/tcp: 8080
+ports_description:
+  80/tcp: ZoneMinder Web UI
+options:
+  db_name: zm
+  db_user: zmuser
+  db_pass: zmsecret
+  db_root_pass: rootsecret
+  timezone: UTC
+schema:
+  db_name: str
+  db_user: str
+  db_pass: str
+  db_root_pass: str
+  timezone: str
